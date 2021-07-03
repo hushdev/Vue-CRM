@@ -1,0 +1,105 @@
+<template>
+  <form @submit.prevent="login" class="card auth-card">
+    <div class="card-content">
+      <span class="card-title">Домашняя бухгалтерия</span>
+      <div class="input-field">
+        <input
+          v-model.trim="$v.email.$model"
+          id="email"
+          type="text"
+          :class="{
+            invalid:
+              ($v.email.$dirty && !$v.email.required) ||
+              ($v.email.$dirty && !$v.email.email),
+          }"
+        />
+        <label for="email">Email</label>
+        <small
+          v-if="$v.email.$dirty && !$v.email.required"
+          class="helper-text invalid"
+          >Поле email не должно быть пустым</small
+        >
+        <small
+          v-else-if="$v.email.$dirty && !$v.email.email"
+          class="helper-text invalid"
+          >Введите корректный email</small
+        >
+      </div>
+      <div class="input-field">
+        <input
+          v-model.trim="$v.password.$model"
+          id="password"
+          type="password"
+          :class="{
+            invalid:
+              ($v.password.$dirty && !$v.password.required) ||
+              ($v.password.$dirty && !$v.password.minLength),
+          }"
+        />
+        <label for="password">Пароль</label>
+        <small
+          v-if="$v.password.$dirty && !$v.password.required"
+          class="helper-text invalid"
+          >Введите пароль</small
+        >
+        <small
+          v-else-if="$v.password.$dirty && !$v.password.minLength"
+          class="helper-text invalid"
+          >Пароль не может быть меньше
+          {{ $v.password.$params.minLength.min }} символов, сейчас
+          {{ password.length }}</small
+        >
+      </div>
+    </div>
+    <div class="card-action">
+      <div>
+        <button class="btn waves-effect waves-light auth-submit" type="submit">
+          Войти
+          <i class="material-icons right">send</i>
+        </button>
+      </div>
+
+      <p class="center">
+        Нет аккаунта?
+        <router-link to="/register">Зарегистрироваться</router-link>
+      </p>
+    </div>
+  </form>
+</template>
+
+<script>
+import { required, minLength, email } from "vuelidate/lib/validators";
+import messages from "@/utils/messages";
+
+export default {
+  name: "login",
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  validations: {
+    email: { email, required },
+    password: { required, minLength: minLength(8) },
+  },
+  mounted() {
+    if (messages[this.$route.query.message]) {
+      this.$message(messages.logout);
+    }
+  },
+  methods: {
+    login() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
+      const formData = {
+        email: this.email,
+        password: this.password,
+      };
+      this.$router.push("/");
+    },
+  },
+};
+</script>
