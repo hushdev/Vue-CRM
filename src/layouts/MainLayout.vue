@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
-import AddBtn from "@/components/AddBtn";
+import Navbar from "@/components/app/Navbar";
+import Sidebar from "@/components/app/Sidebar";
+import AddBtn from "@/components/app/AddBtn";
 
 export default {
   name: "main-layout",
@@ -25,6 +25,11 @@ export default {
     return {
       isSidebarOpen: true,
     };
+  },
+  async mounted() {
+    if (!Object.keys(this.$store.getters.info).length) {
+      await this.$store.dispatch("getInfo");
+    }
   },
 };
 </script>

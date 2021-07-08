@@ -5,7 +5,7 @@
         <a href="#" @click.prevent="$emit('toggleSidebar')">
           <i class="material-icons black-text">dehaze</i>
         </a>
-        <span class="black-text">{{ date | date('date-time') }}</span>
+        <span class="black-text">{{ date | date("date-time") }}</span>
       </div>
 
       <ul class="right hide-on-small-and-down">
@@ -16,7 +16,7 @@
             data-target="dropdown"
             ref="dropdown"
           >
-            USER NAME
+            {{name}}
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
@@ -49,15 +49,20 @@ export default {
     };
   },
   methods: {
-    logout() {
+    async logout() {
+      await this.$store.dispatch("logout");
       this.$router.push("/login?message=logout");
     },
+  },
+  computed: {
+    name() {
+      return this.$store.getters.info.name;
+    }
   },
   mounted() {
     //materialize dropdown init
     this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
-      constraintWidth: true,
-      alignment: "center",
+      constrainWidth: false
     });
 
     //timer

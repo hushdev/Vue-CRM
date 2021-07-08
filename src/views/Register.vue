@@ -120,7 +120,7 @@ export default {
     username: { required, minLength: minLength(3) },
   },
   methods: {
-    register() {
+    async register() {
       if (!this.agree) {
         return;
       }
@@ -128,13 +128,15 @@ export default {
         this.$v.$touch();
         return;
       }
-      const formData = {
-        email: this.email,
-        password: this.password,
-        username: this.username,
-      };
-      this.$router.push("/");
-      console.log(formData);
+      try {
+        const formData = {
+          email: this.email,
+          password: this.password,
+          username: this.username,
+        };
+        await this.$store.dispatch("register", formData);
+        this.$router.push("/");
+      } catch (e) {}
     },
   },
 };

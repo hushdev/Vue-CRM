@@ -10,11 +10,13 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
+import Preloader from '@/components/app/Preloader'
 
 Vue.config.productionTip = false;
 Vue.filter('date', dateFilter);
 Vue.use(Vuelidate);
 Vue.use(messagePlugin);
+Vue.component("Preloader", Preloader)
 
 const firebaseConfig = {
   apiKey: "AIzaSyA5VbqglB2SKkDOvSthirri4R7FB2mQl94",
